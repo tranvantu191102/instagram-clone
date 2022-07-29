@@ -59,7 +59,7 @@ const Register = () => {
                     photoURL: "",
                     followers: [],
                     following: [],
-                    posts: [],
+                    posts: 0,
                 }
                 await setDoc(doc(db, 'users', user.uid), userData)
 

@@ -6,10 +6,12 @@ const modalSlice = createSlice({
         showModalImage: false,
         showModalAddPost: false,
         showModalPost: false,
-        showModalPostOptions: false,
+        showOptionPostCard: false,
         showModalSetting: false,
+        showModalSettingComment: false,
         showModalUnFollow: false,
-        showModalSettingUser: false
+        showModalSettingUser: false,
+        showModalAddConversation: false,
     },
     reducers: {
         show(state, action) {
@@ -29,11 +31,17 @@ const modalSlice = createSlice({
                 case 'MODAL_SETTING':
                     state.showModalSetting = true;
                     break;
+                case 'MODAL_SETTING_COMMENT':
+                    state.showModalSettingComment = true;
+                    break;
                 case 'MODAL_UNFOLLOW':
                     state.showModalUnFollow = true;
                     break;
                 case 'MODAL_SETTING_USER':
                     state.showModalSettingUser = true;
+                    break;
+                case 'MODAL_ADD_CONVERSATION':
+                    state.showModalAddConversation = true;
                     break;
                 default: return
             }
@@ -55,11 +63,17 @@ const modalSlice = createSlice({
                 case 'MODAL_SETTING':
                     state.showModalSetting = false;
                     break;
+                case 'MODAL_SETTING__COMMENT':
+                    state.showModalSettingComment = false;
+                    break;
                 case 'MODAL_UNFOLLOW':
                     state.showModalUnFollow = false;
                     break;
                 case 'MODAL_SETTING_USER':
                     state.showModalSettingUser = false;
+                    break;
+                case 'MODAL_ADD_CONVERSATION':
+                    state.showModalAddConversation = false;
                     break;
                 default:
                     state.showModalAddPost = false;
@@ -67,8 +81,10 @@ const modalSlice = createSlice({
                     state.showModalPost = false;
                     state.showModalPostOptions = false;
                     state.showModalSetting = false;
+                    state.showModalSettingComment = false;
                     state.showModalUnFollow = false;
                     state.showModalSettingUser = false;
+                    state.showModalAddConversation = false;
             }
         },
     }

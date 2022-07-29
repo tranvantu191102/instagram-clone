@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import Header from './Header/Header'
@@ -7,53 +7,64 @@ import { publicRouters } from '../routes'
 import ModalImage from '../components/Modal/ModalImage'
 import PostModalCard from '../components/Post/PostModalCard'
 import ModalAddPost from '../components/Modal/ModalAddPost'
-
+import ModalSettingAccount from '../components/Modal/ModalSettingAccount'
+import ModalAddConsersation from '../components/Modal/ModalAddConsersation'
 
 const Layout = () => {
 
     const login = useSelector(state => state.user.login)
-    const isShowModalPostCard = useSelector(state => state.post.isShowModalPostCard)
-    const isShowModalPost = useSelector(state => state.modal.showModalAddPost)
+    const navigate = useNavigate()
+    const isShowModalPostCard = useSelector(state => state.modal.showModalPost)
+    const isShowModalAddPost = useSelector(state => state.modal.showModalAddPost)
     const isShowModalImage = useSelector(state => state.modal.showModalImage)
+    const isShowModalSetting = useSelector(state => state.modal.showModalSetting)
+    const isShowModalAddConversation = useSelector(state => state.modal.showModalAddConversation)
     // const login = true
     // const isShowModalPost = false
-    // console.log("login", login)
 
     useEffect(() => {
-        if (isShowModalImage || isShowModalPost || isShowModalPostCard) {
+        if (isShowModalImage || isShowModalAddPost || isShowModalPostCard) {
             document.body.classList.add('overflow-hidden')
         } else document.body.classList.remove('overflow-hidden')
-    }, [isShowModalImage, isShowModalPost, isShowModalPost])
+    }, [isShowModalImage, isShowModalAddPost, isShowModalPostCard])
+
+    useEffect(() => {
+        if (!login) {
+            navigate('/login')
+        }
+    }, [])
 
 
     return (
         <div >
             {
-                <BrowserRouter>
-                    {
-                        login && <Header />
-                    }
-
-                    <Routes>
-                        {
-                            publicRouters.map((route, index) => {
-                                const Comp = route.element
-                                return <Route path={route.path} element={<Comp />} key={index} />
-                            })
-                        }
-                    </Routes>
-                    {/* <Footer /> */}
-
-                </BrowserRouter>
+                login && <Header />
             }
+
+            <Routes>
+                {
+                    publicRouters.map((route, index) => {
+                        const Comp = route.element
+                        return <Route path={route.path} element={<Comp />} key={index} />
+                    })
+                }
+            </Routes>
+            {/* <Footer /> */}
+
             {
-                isShowModalPost && <ModalAddPost />
+                isShowModalAddPost && <ModalAddPost />
             }
             {
                 isShowModalImage && <ModalImage />
             }
             {
                 isShowModalPostCard && <PostModalCard />
+            }
+            {
+                isShowModalSetting && <ModalSettingAccount />
+            }
+            {
+                isShowModalAddConversation && <ModalAddConsersation />
             }
         </div>
     )

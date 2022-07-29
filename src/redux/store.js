@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import userReducer from './reducers/userReducer'
 import postReducer from './reducers/postReducer'
 import modalReducer from './reducers/modalReducer'
+import conversationReducer from './reducers/conversationReducer'
 
 import {
     persistReducer,
@@ -24,7 +25,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userReducer,
     post: postReducer,
-    modal: modalReducer
+    modal: modalReducer,
+    conversation: conversationReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

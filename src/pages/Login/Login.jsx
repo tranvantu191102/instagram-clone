@@ -67,7 +67,7 @@ const Login = () => {
                     search,
                     followers: [],
                     following: [],
-                    posts: [],
+                    posts: 0,
                 })
             }
         } catch (error) {

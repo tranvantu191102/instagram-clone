@@ -8,9 +8,8 @@ import { faEllipsis, faUser, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserRedux } from '../../redux/reducers/userReducer'
+import { show } from '../../redux/reducers/modalReducer';
 
-
-import StoryCard from '../Stories/StoryCard'
 import Footer from '../../Layout/Footer'
 import userImage from '../../assets/images/user.png'
 import catalogProfile from '../../assets/fake-data/catalogProfile';
@@ -40,6 +39,7 @@ const ProfileUser = () => {
             docSnap.data().followers.forEach((id) => {
                 if (id === userCurrent.id) {
                     setFollowed(true)
+                    return
                 }
             })
         }
@@ -73,7 +73,7 @@ const ProfileUser = () => {
         }
     }
 
-    const handleCancelFollow = async () => {
+    const handleUnFollowUser = async () => {
         try {
             setLoading(true)
             const userFollowed = doc(db, 'users', user.id)
@@ -98,6 +98,10 @@ const ProfileUser = () => {
             console.log(error)
             setLoading(false)
         }
+    }
+
+    const handleClickSetting = () => {
+        dispatch(show('MODAL_SETTING'))
     }
 
 
@@ -129,7 +133,7 @@ const ProfileUser = () => {
                                             className={`px-5 py-[5px] border-[1px] mr-4 border-border-color rounded-lg font-semibold text-base 
                                          ${loading ? 'opacity-50' : ''}
                                         `}
-                                            onClick={handleCancelFollow}
+                                            onClick={handleUnFollowUser}
                                         >
                                             <FontAwesomeIcon icon={faCheck} className='text-sm' />
                                             <FontAwesomeIcon icon={faUser} />
@@ -146,13 +150,15 @@ const ProfileUser = () => {
                                         </button>
                                     </>
                             }
-                            <div className='ml-3 text-lg cursor-pointer px-2 py-1'>
+                            <div className='ml-3 text-lg cursor-pointer px-2 py-1'
+                                onClick={handleClickSetting}
+                            >
                                 <FontAwesomeIcon icon={faEllipsis} />
                             </div>
                         </div>
                         <div className='flex items-center justify-between pr-4 mt-4'>
                             <p className='text-lg text-primary-text font-normal'>
-                                <span className='font-semibold'>1</span> post
+                                <span className='font-semibold'>{user.posts}</span> post
                             </p>
                             <p className='text-lg text-primary-text font-normal'>
                                 <span className='font-semibold'>{user.followers.length || 0}</span> followers
@@ -167,14 +173,7 @@ const ProfileUser = () => {
                         </div>
                     </div>
                 </div>
-                <div className='mt-14 ml-16'>
-                    <div className='flex items-center justify-start'>
-                        <StoryCard />
-                        <StoryCard />
-                        <StoryCard />
-                    </div>
-                    <h3 className='text-base text-primary-text font-semibold mt-2'>Tin noi bat</h3>
-                </div>
+
                 <div className='w-full mt-10 border-t-2 border-gray-bg flex items-center justify-center'>
                     {
                         catalogProfile.map((item, index) => (

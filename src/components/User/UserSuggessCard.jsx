@@ -1,19 +1,113 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from '../../firebase/config';
+import { setUserRedux } from '../../redux/reducers/userReducer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { useEffect } from 'react';
 
-const UserSuggessCard = () => {
+import userImage from '../../assets/images/user.png'
+
+const UserSuggessCard = ({ user }) => {
+
+  const [loading, setLoading] = useState(false)
+  const [followed, setFollowed] = useState(false)
+  const userCurrent = useSelector(state => state.user.userData)
+  const dispatch = useDispatch()
+
+
+  useEffect(() => {
+    const follower = userCurrent.following.filter(id => id === user.id)
+    if (follower.length > 0) {
+      setFollowed(true)
+    }
+  }, [userCurrent])
+
+  const handleFollowUser = async () => {
+
+    try {
+      setLoading(true)
+      console.log("Follow")
+      const userRef = doc(db, 'users', user.id)
+      const userCurrentRef = doc(db, 'users', userCurrent.id)
+
+      await updateDoc(userRef, {
+        followers: [...user.followers, userCurrent.id]
+      })
+      await updateDoc(userCurrentRef, {
+        following: [...userCurrent.following, user.id]
+      })
+
+      dispatch(setUserRedux({
+        ...userCurrent,
+        following: [...userCurrent.following, user.id]
+      }))
+      setFollowed(true)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
+  const handleUnFollowUser = async () => {
+    try {
+      setLoading(true)
+      console.log("UnFollow")
+      const userFollowed = doc(db, 'users', user.id)
+      const userFollow = doc(db, 'users', userCurrent.id)
+
+      const following = userCurrent.following.filter(id => id !== user.id)
+      const followers = user.followers.filter(id => id !== userCurrent.id)
+
+      await updateDoc(userFollow, {
+        following
+      })
+      await updateDoc(userFollowed, {
+        followers
+      })
+      dispatch(setUserRedux({
+        ...userCurrent,
+        following
+      }))
+      setFollowed(false)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
+
   return (
     <div className='flex items-center justify-between my-4'>
       <div className='flex items-center justify-center'>
-        <img src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/281988307_1433042003796430_3461745100172633469_n.jpg?stp=dst-jpg_p160x160&_nc_cat=103&ccb=1-7&_nc_sid=7206a8&_nc_ohc=ZKYtFKPPu8IAX-qVWmv&_nc_ht=scontent.fdad3-1.fna&oh=00_AT_wtSrTrx3qcpDImhFxugZvs2Ieynf9h5VZd_i2_-cgQw&oe=62B1D8EF"
+        <img src={user.photoURL || userImage}
           alt=""
           className='w-[32px] h-[32px] rounded-full'
         />
         <div className='ml-4'>
-          <p className='text-base text-primary-text font-semibold hover:underline cursor-pointer'>tranvantu_170</p>
-          <p className='text-base text-gray-text font-semibold'>Trần Văn Tú</p>
+          <p className='text-base text-primary-text font-semibold hover:underline cursor-pointer'>
+            <Link to={`profile/${user.id}`}> {user.username}</Link>
+          </p>
+          <p className='text-base text-gray-text font-semibold'>{user.fullname}</p>
         </div>
       </div>
-      <button className='text-sm text-blue-text font-semibold'>Follow</button>
+      <button className='text-sm text-blue-text font-semibold'
+      >
+        {
+          loading ?
+            <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+              <FontAwesomeIcon icon={faSpinner} />
+            </svg> :
+            followed ?
+              <p onClick={handleUnFollowUser}>Following</p>
+              :
+              <p onClick={handleFollowUser}>Follow</p>
+        }
+      </button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 function getTime(seconds, nanoseconds) {
 
-    const created = new Date(seconds * 1000 + nanoseconds / 1000000).getTime();
+    const created = new Date(seconds * 1000 + nanoseconds / 1000000)
     let periods = {
         year: 365 * 30 * 24 * 60 * 60 * 1000,
         month: 30 * 24 * 60 * 60 * 1000,

@@ -1,18 +1,33 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { addUserActive } from '../../redux/reducers/conversationReducer'
 
-const UserCard = () => {
+import userImage from '../../assets/images/user.png'
+
+
+const UserCard = ({ user }) => {
+
+    const dispatch = useDispatch()
+
+    const handleActiveUser = () => {
+        dispatch(addUserActive(user))
+    }
+
+    console.log(user)
+
     return (
-        <div className='py-3 px-4 hover:bg-second-bg cursor-pointer flex items-center justify-start'>
+        <div className='py-3 px-4 hover:bg-second-bg cursor-pointer flex items-center justify-start'
+            onClick={handleActiveUser}
+        >
             <div className='mr-4'>
                 <img
-                    src="https://scontent.fdad3-3.fna.fbcdn.net/v/t1.6435-9/86766289_876973282736641_7952438239841746944_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=174925&_nc_ohc=RcKFRphg5AoAX8IRQCg&_nc_ht=scontent.fdad3-3.fna&oh=00_AT9C-Rm3HWsxJf3XuEEOBQLO4m59AwWHNUcETu6Dc6y-jA&oe=62D25119"
+                    src={user.photoURL || userImage}
                     alt=""
                     className='w-[56px] h-[56px] rounded-full'
                 />
             </div>
             <div>
-                <h4 className='text-base text-primary-text font-semibold'>Trinh Nguyen</h4>
-                <p className='text-base text-gray-text font-normal'>Sent you a messages <span>25w</span></p>
+                <h4 className='text-base text-primary-text font-semibold'>{user.fullname}</h4>
             </div>
         </div>
     )

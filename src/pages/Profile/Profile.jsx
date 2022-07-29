@@ -8,7 +8,6 @@ import _ from 'lodash'
 import userImage from '../../assets/images/user.png'
 
 
-import StoryCard from '../../components/Stories/StoryCard'
 import Footer from '../../Layout/Footer'
 import Post from './Post'
 import Saved from './Saved'
@@ -33,7 +32,6 @@ const Profile = () => {
     ]
     const [activeIndex, setActiveIndex] = useState(0)
     const user = useSelector(state => state.user.userData)
-
 
 
     return (
@@ -62,7 +60,7 @@ const Profile = () => {
                         </div>
                         <div className='flex items-center justify-between pr-4 mt-4'>
                             <p className='text-lg text-primary-text font-normal'>
-                                <span className='font-semibold'>1</span> post
+                                <span className='font-semibold'>{user.posts}</span> post
                             </p>
                             <p className='text-lg text-primary-text font-normal'>
                                 <span className='font-semibold'>{user.followers.length || 0}</span> followers
@@ -77,19 +75,11 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                <div className='mt-14 ml-16'>
-                    <div className='flex items-center justify-start'>
-                        <StoryCard />
-                        <StoryCard />
-                        <StoryCard />
-                    </div>
-                    <h3 className='text-base text-primary-text font-semibold mt-2'>Tin noi bat</h3>
-                </div>
                 <div className='w-full mt-10 border-t-2 border-gray-bg flex items-center justify-center'>
                     {
                         catalogProfile.map((item, index) => (
                             <div
-                                className={`mr-12 p-3 cursor-pointer relative
+                                className={`px-10 p-3 cursor-pointer relative
                            ${activeIndex === index ? "before:content-[''] before:w-full before:absolute before:h-[1px] before:bottom-12 before:left-0 before:bg-primary-text" : ""}`}
                                 key={index}
                                 onClick={() => setActiveIndex(index)}

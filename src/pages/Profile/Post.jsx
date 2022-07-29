@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { addPostCard, showModalPostCard } from '../../redux/reducers/postReducer';
+import { show } from '../../redux/reducers/modalReducer';
 
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from '../../firebase/config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -13,23 +14,21 @@ const Post = (props) => {
     const dispatch = useDispatch()
     const { user } = props
     useEffect(() => {
-        const getPosts = async () => {
-            const postsRef = collection(db, 'posts')
-            const q = query(postsRef, where('userId', '==', user.id))
-            const querySnapshot = await getDocs(q)
+        const postsRef = collection(db, 'posts')
+        const q = query(postsRef, where('userId', '==', user.id))
+        const unsub = onSnapshot(q, querySnapshot => {
             let data = []
             querySnapshot.forEach((doc) => {
-                data = [...data, doc.data()]
+                data.push({ ...doc.data(), id: doc.id })
             });
             setPosts(data.reverse())
-        }
+        })
 
-        getPosts()
     }, [])
 
     const handleShowPostCard = (post) => {
         dispatch(addPostCard(post))
-        dispatch(showModalPostCard())
+        dispatch(show('MODAL_POST'))
     }
 
 
@@ -53,7 +52,7 @@ const Post = (props) => {
                             group-hover:visible group-hover:opacity-100 transition-all duration-300 ease-linear'>
                                 <span className='text-2lg text-white-text font-semibold mr-4'>
                                     <FontAwesomeIcon icon={faHeart} className="mr-2" />
-                                    {item.like}
+                                    {item.like.length}
                                 </span>
                                 <span className='text-2lg text-white-text font-semibold'>
                                     <FontAwesomeIcon icon={faComment} className="mr-2" />

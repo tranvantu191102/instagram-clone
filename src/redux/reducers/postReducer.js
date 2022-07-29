@@ -3,34 +3,21 @@ import { createSlice } from "@reduxjs/toolkit"
 const postSlice = createSlice({
     name: 'post',
     initialState: {
-        isShowModal: false,
-        isShowModalPostCard: false,
-        postCard: {}
+        postCard: {},
+        postList: [],
     },
     reducers: {
-        showModal(state) {
-            state.isShowModal = true;
-        },
-        hiddenModal(state) {
-            state.isShowModal = false;
-        },
-        showModalPostCard(state) {
-            state.isShowModalPostCard = true;
-        },
-        hideModalPostCard(state) {
-            state.isShowModalPostCard = false;
-        },
         addPostCard(state, action) {
             state.postCard = action.payload
+        },
+        addPostList(state, action) {
+            state.postList = action.payload
         }
     }
 })
 
 export const {
-    showModal,
-    hiddenModal,
-    showModalPostCard,
-    hideModalPostCard,
-    addPostCard
+    addPostCard,
+    addPostList
 } = postSlice.actions
 export default postSlice.reducer

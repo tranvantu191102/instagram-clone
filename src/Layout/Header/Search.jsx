@@ -73,6 +73,14 @@ const Search = () => {
         }
     }, [])
 
+    const handleOnFocusInput = () => {
+        setShowResultsSearch(true)
+    }
+
+    const handleOnBlurInput = () => {
+        setSearchTerm("")
+    }
+
     const handleCancelSearch = () => {
         setSearchTerm("")
     }
@@ -89,7 +97,8 @@ const Search = () => {
                 className='text-lg font-normal bg-transparent outline-none'
                 type="text"
                 placeholder='Search...'
-                onFocus={() => setShowResultsSearch(true)}
+                onFocus={handleOnFocusInput}
+                onBlur={handleOnBlurInput}
                 onChange={(e) => handleOnChangeInput(e)}
             />
             <div className={`text-lg text-gray-text font-normal cursor-pointer ${!showResultsSearch ? 'hidden' : ''}`}

@@ -3,10 +3,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
 import { useSelector, useDispatch } from 'react-redux';
 import { db, storage } from '../../firebase/config'
-import { collection, addDoc, serverTimestamp, doc } from 'firebase/firestore'
+import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeftLong, faFolderPlus, faLocationDot, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeftLong, faFolderPlus, faLocationDot, faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { faFaceGrinBeam } from '@fortawesome/free-regular-svg-icons'
 import Picker from 'emoji-picker-react';
 
@@ -72,12 +72,16 @@ const ModalAddPost = () => {
 
         const postRef = collection(db, 'posts')
         await addDoc(postRef, {
-            postId: doc(postRef).id,
             caption,
             arrImg,
             userId: user.id,
             like: [],
             timestamp: serverTimestamp()
+        })
+
+        await updateDoc(doc(db, 'users', user.id), {
+            ...user,
+            posts: user.posts + 1
         })
 
         setLoading(false)
@@ -100,11 +104,15 @@ const ModalAddPost = () => {
 
                     <span className='text-base text-blue-text font-bold cursor-pointer'
                         onClick={() => handleSavePost()}
-                    >{loading ? '....' : 'Share'}
+                    >{loading ?
+                        <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+                            <FontAwesomeIcon icon={faSpinner} />
+                        </svg>
+                        : 'Share'}
                     </span>
 
                 </div>
-                <div className='flex items-start justify-center'>
+                <div className='flex items-start justify-start'>
                     <div className='h-[424px] w-[424px] overflow-auto border-r-[1px] border-border-color'>
                         {
                             activeIndex === 1 &&
