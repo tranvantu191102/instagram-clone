@@ -10,9 +10,12 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../redux/reducers/userReducer'
-import { show } from '../../redux/reducers/modalReducer'
+import { show, hide } from '../../redux/reducers/modalReducer'
+import { refreshConversation } from '../../redux/reducers/conversationReducer'
+import { refreshPost } from '../../redux/reducers/postReducer'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase/config'
+import { useSelector } from 'react-redux/es/exports'
 
 import userImage from '../../assets/images/user.png'
 import userActions from '../../assets/fake-data/user-actions'
@@ -21,6 +24,7 @@ const Navigate = () => {
 
     const [activeIndex, setActiveIndex] = useState(0)
     const [isShowActions, setIsShowActions] = useState(false)
+    const userCurrent = useSelector(state => state.user.userData)
     const userRef = useRef(null)
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -43,6 +47,9 @@ const Navigate = () => {
         try {
             await signOut(auth)
             dispatch(logout())
+            dispatch(hide())
+            dispatch(refreshConversation())
+            dispatch(refreshPost())
             navigate("/login")
         } catch (error) {
             console.log(error);
@@ -93,7 +100,7 @@ const Navigate = () => {
             </div>
             <div className='relative'>
                 <img ref={userRef}
-                    src={userImage}
+                    src={userCurrent.photoURL || userImage}
                     alt="user"
                     className='w-6 h-6 rounded-full cursor-pointer'
                 // onClick={() => setIsShowActions(!isShowActions)}

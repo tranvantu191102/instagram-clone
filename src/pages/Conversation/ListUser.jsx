@@ -4,10 +4,8 @@ import UserCard from './UserCard'
 import { useSelector } from 'react-redux'
 
 
-const ListUser = () => {
+const ListUser = ({ listUser }) => {
 
-    const listUser = useSelector(state => state.conversation.listUser)
-    console.log("list", listUser)
     return (
         <div>
             {

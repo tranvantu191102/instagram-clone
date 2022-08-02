@@ -6,7 +6,7 @@ import infoImage from '../../../assets/images/chat/info.png'
 import userImage from '../../../assets/images/user.png'
 
 
-const ChatHeader = ({ user }) => {
+const ChatHeader = ({ user, setShowSettingConversation }) => {
     return (
         <div className='h-[58px] w-full border-b-[1px] border-border-color px-5 flex items-center justify-between'>
             <div className="flex items-center justify-start">
@@ -37,6 +37,7 @@ const ChatHeader = ({ user }) => {
                         src={infoImage}
                         alt=""
                         className='w-6 h-6 cursor-pointer'
+                        onClick={() => setShowSettingConversation(true)}
                     />
                 </div>
             </div>

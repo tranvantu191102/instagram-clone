@@ -12,12 +12,17 @@ const postSlice = createSlice({
         },
         addPostList(state, action) {
             state.postList = action.payload
+        },
+        refreshPost(state) {
+            state.postCard = {};
+            state.postList = [];
         }
     }
 })
 
 export const {
     addPostCard,
-    addPostList
+    addPostList,
+    refreshPost
 } = postSlice.actions
 export default postSlice.reducer
