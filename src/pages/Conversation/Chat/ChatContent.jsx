@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { collection, query, onSnapshot, limit, orderBy } from "firebase/firestore";
+import { collection, query, onSnapshot, limitToLast, orderBy } from "firebase/firestore";
 import { db } from '../../../firebase/config';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import Message from './Message';
 
@@ -10,59 +12,79 @@ const ChatContent = ({ user }) => {
 
     const userCurrent = useSelector(state => state.user.userData)
     const userActive = useSelector(state => state.conversation.userActive)
+    const [limitCount, setLimitCount] = useState(10)
+    const [loading, setLoading] = useState(false)
     const [conversation, setConversation] = useState([])
-    const scrollRef = useRef(null)
+    const scrollBottomRef = useRef(null)
+
+    useEffect(() => {
+        scrollBottomRef.current?.scrollIntoView()
+        setLimitCount(10)
+
+        setTimeout(() => {
+            scrollBottomRef.current?.scrollIntoView()
+        }, 500);
+    }, [userActive])
 
     useEffect(() => {
         try {
+            setLoading(true)
             const conversationId = user.id > userCurrent.id ? `${user.id + userCurrent.id}` : `${userCurrent.id + user.id}`
             const conversationRef = collection(db, 'conversations', conversationId, 'content')
-            const q = query(conversationRef, orderBy('time', 'asc', limit(20)))
+            const q = query(conversationRef, orderBy('time'), limitToLast(limitCount))
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const results = []
                 querySnapshot.forEach(doc => {
                     results.push({ ...doc.data(), id: doc.id })
                 })
                 setConversation(results)
-                return unsubscribe
+                setLoading(false)
             })
+            return unsubscribe
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
 
-    }, [userActive])
+    }, [userActive, limitCount])
 
+    const handleScrollConversation = (e) => {
 
-    useEffect(() => {
-        if (scrollRef && scrollRef.current) {
-            const element = scrollRef.current;
-            element.scroll({
-                top: element.scrollHeight,
-                left: 0,
-                behavior: "smooth"
-            })
+        const { scrollTop } = e.currentTarget
+        if (limitCount > conversation.length + 10) return
+        if (scrollTop < 20) {
+            setLimitCount((prev) => prev + 10)
         }
-    }, [conversation])
 
-    // console.log("conversation", conversation)
+    }
+
 
 
     return (
         <div className='h-[calc(100%-142px)] w-full overflow-y-auto scrollbar-hide'
-            ref={scrollRef}
+            onScroll={(e) => handleScrollConversation(e)}
         >
-            <div className="px-5">
+            <div className="px-5" >
+                {loading &&
+                    <div className='w-full flex items-center justify-center'>
+                        <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+                            <FontAwesomeIcon icon={faSpinner} />
+                        </svg>
+                    </div>}
                 {
                     conversation && conversation.length > 0 && conversation.map((item, index) => (
-                        <Message
-                            user={user}
-                            userCurrent={userCurrent}
-                            message={item}
-                            key={index}
-                        />
+                        <div className="" key={index}>
+                            <Message
+                                user={user}
+                                userCurrent={userCurrent}
+                                message={item}
+                            />
+                        </div>
                     ))
                 }
+
             </div>
+            <div ref={scrollBottomRef} ></div>
         </div>
     )
 }

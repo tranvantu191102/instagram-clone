@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useParams } from 'react-router-dom'
 import { db } from '../../firebase/config';
 import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faUser, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserRedux } from '../../redux/reducers/userReducer'
 import { show } from '../../redux/reducers/modalReducer';
@@ -26,6 +25,7 @@ const ProfileUser = () => {
     const [followed, setFollowed] = useState(false)
     const [loading, setLoading] = useState(false)
     const [activeIndex, setActiveIndex] = useState(0)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -190,7 +190,7 @@ const ProfileUser = () => {
                     }
                 </div>
                 {
-                    activeIndex === 0 && <Post user={user} />
+                    activeIndex === 0 && <Post user={user} id={id} />
                 }
                 {
                     activeIndex === 1 && <Reels />

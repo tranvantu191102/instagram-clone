@@ -5,6 +5,7 @@ const conversationSlice = createSlice({
     initialState: {
         listUser: [],
         userActive: {},
+        messageId: ''
     },
     reducers: {
         addListUserConversation(state, action) {
@@ -19,6 +20,9 @@ const conversationSlice = createSlice({
         addUserActive(state, action) {
             state.userActive = action.payload
         },
+        setMessageId(state, action) {
+            state.messageId = action.payload
+        },
         refreshConversation(state) {
             state.listUser = []
             state.userActive = {}
@@ -31,6 +35,7 @@ export const {
     addListUserConversation,
     addUserActive,
     refreshConversation,
-    editListUser
+    editListUser,
+    setMessageId
 } = conversationSlice.actions
 export default conversationSlice.reducer

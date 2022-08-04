@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 const ListUser = ({ listUser }) => {
 
     return (
-        <div>
+        <div className=''>
             {
                 listUser && listUser.length > 0 &&
                 listUser.map((item, index) => (

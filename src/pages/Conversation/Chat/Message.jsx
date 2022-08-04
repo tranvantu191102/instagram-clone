@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+import { updateDoc, doc } from 'firebase/firestore';
+import { db } from '../../../firebase/config';
+import { useSelector, useDispatch } from 'react-redux';
+import { show } from '../../../redux/reducers/modalReducer';
+import { setMessageId } from '../../../redux/reducers/conversationReducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 
-const Message = ({ user, userCurrent, message }) => {
+import HeartImage from '../../../assets/images/chat/heart-red.png'
+
+const Message = ({ user, message }) => {
 
     const [showOptionMessage, setShowOptionMessage] = useState(false)
+    const userCurrent = useSelector(state => state.user.userData)
     const toggleRef = useRef(null)
+    const dispatch = useDispatch()
 
     const handleShowOptionMessage = () => {
         setShowOptionMessage(true)
@@ -27,6 +36,30 @@ const Message = ({ user, userCurrent, message }) => {
     }, [])
 
 
+
+    const handleLikeMessage = async () => {
+        const conversationId = user.id > userCurrent.id ? `${user.id + userCurrent.id}` : `${userCurrent.id + user.id}`
+        const conversationRef = doc(db, 'conversations', conversationId, 'content', message.id)
+        await updateDoc(conversationRef, {
+            like: true
+        })
+
+    }
+
+    const handleUnLikeMessage = async () => {
+        const conversationId = user.id > userCurrent.id ? `${user.id + userCurrent.id}` : `${userCurrent.id + user.id}`
+        const conversationRef = doc(db, 'conversations', conversationId, 'content', message.id)
+        await updateDoc(conversationRef, {
+            like: false
+        })
+    }
+
+    const handleUnsendMessage = async () => {
+        dispatch(show('MODAL_UNSEND_MESSAGE'))
+        dispatch(setMessageId(message.id))
+    }
+
+
     return (
         <div
             className={`group flex items-end ${message.user !== user.id ? 'justify-start' : 'justify-end'} my-3`}
@@ -42,15 +75,48 @@ const Message = ({ user, userCurrent, message }) => {
                         />
                     }
                 </div>
-                <div className={`py-2 px-4 max-w-[200px] w-fit rounded-3xl mr-2
-                 ${message.user === user.id ?
-                        'border-[1px] border-border-color bg-primary-bg' :
-                        'bg-gray-bg border-[1px] border-gray-bg'}`}
-                >
-                    <span className='text-base text-primary-text font-normal'>
-                        {message.message}
-                    </span>
+                <div className="relative">
+                    {
+                        message.message ?
+                            message.message === 'heart-icon-ttt' ?
+                                <img
+                                    src={HeartImage}
+                                    className='w-[50px]'
+                                />
+                                :
+                                <div className={`py-2 px-4 max-w-[200px] w-fit rounded-3xl mr-2
+                             ${message.user === user.id ?
+                                        'border-[1px] border-gray-bg bg-gray-bg' :
+                                        'bg-primary-bg border-[1px] border-gray-bg'}
+                                    ${message.like ? 'mb-2' : ''}`}
+                                >
+                                    <span className='text-base text-primary-text font-normal'>
+                                        {message?.message}
+                                    </span>
+                                </div>
+                            :
+                            <div
+                                className={message.like ? 'mb-2' : ''}
+                            >
+                                <img
+                                    src={message?.photoURL}
+                                    alt=""
+                                    className='max-w-[200px] rounded-xl cursor-pointer'
+                                />
+                            </div>
+                    }
+                    {message.like &&
+                        <div className={`absolute top-[calc(100%-15px)] ${message.user === user.id ? 'right-2' : 'left-2'}`}>
+                            <img
+                                src={HeartImage}
+                                alt=""
+                                className='h-6 w-6 bg-gray-bg z-50 p-1 cursor-pointer rounded-full border-[1px] border-white '
+                                onClick={handleUnLikeMessage}
+                            />
+                        </div>}
                 </div>
+
+
                 <div className="relative">
                     <div className={`group-hover:block text-gray-text px-4 py-2 cursor-pointer
                      ${showOptionMessage ?
@@ -71,8 +137,10 @@ const Message = ({ user, userCurrent, message }) => {
                             <div className="relative bg-black flex items-center justify-center px-3 py-2 rounded-xl">
                                 <div className='absolute top-full left-3 border-x-[10px] border-x-transparent border-t-[10px] border-t-black'
                                 ></div>
-                                <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'>
-                                    Like
+                                <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'
+                                    onClick={message.like ? handleUnLikeMessage : handleLikeMessage}
+                                >
+                                    {message.like ? 'Unlike' : 'Like'}
                                 </div>
                                 <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'>
                                     Copy
@@ -93,13 +161,17 @@ const Message = ({ user, userCurrent, message }) => {
                             <div className="relative bg-black flex items-center justify-center px-3 py-2 rounded-xl">
                                 <div className='absolute top-full right-3 border-x-[10px] border-x-transparent border-t-[10px] border-t-black'
                                 ></div>
-                                <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'>
-                                    Like
+                                <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'
+                                    onClick={message.like ? handleUnLikeMessage : handleLikeMessage}
+                                >
+                                    {message.like ? 'Unlike' : 'Like'}
                                 </div>
                                 <div className='text-base text-white-text font-semibold mr-2 cursor-pointer'>
                                     Copy
                                 </div>
-                                <div className='text-base text-white-text font-semibold cursor-pointer'>
+                                <div className='text-base text-white-text font-semibold cursor-pointer'
+                                    onClick={handleUnsendMessage}
+                                >
                                     Unsend
                                 </div>
                             </div>
@@ -107,9 +179,6 @@ const Message = ({ user, userCurrent, message }) => {
                     }
                 </div>
             </div>
-
-
-
         </div>
     )
 }

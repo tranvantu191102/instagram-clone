@@ -12,6 +12,7 @@ const modalSlice = createSlice({
         showModalUnFollow: false,
         showModalSettingUser: false,
         showModalAddConversation: false,
+        showModalUnsendMessage: false
     },
     reducers: {
         show(state, action) {
@@ -42,6 +43,9 @@ const modalSlice = createSlice({
                     break;
                 case 'MODAL_ADD_CONVERSATION':
                     state.showModalAddConversation = true;
+                    break;
+                case 'MODAL_UNSEND_MESSAGE':
+                    state.showModalUnsendMessage = true;
                     break;
                 default: return
             }
@@ -75,6 +79,9 @@ const modalSlice = createSlice({
                 case 'MODAL_ADD_CONVERSATION':
                     state.showModalAddConversation = false;
                     break;
+                case 'MODAL_UNSEND_MESSAGE':
+                    state.showModalUnsendMessage = false;
+                    break;
                 default:
                     state.showModalAddPost = false;
                     state.showModalImage = false;
@@ -85,6 +92,7 @@ const modalSlice = createSlice({
                     state.showModalUnFollow = false;
                     state.showModalSettingUser = false;
                     state.showModalAddConversation = false;
+                    state.showModalUnsendMessage = false;
             }
         },
     }

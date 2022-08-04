@@ -33,7 +33,6 @@ const Profile = () => {
     const [activeIndex, setActiveIndex] = useState(0)
     const user = useSelector(state => state.user.userData)
 
-
     return (
         user && !_.isEmpty(user) &&
         <div className='w-full mt-[60px] bg-second-bg flex justify-center'>

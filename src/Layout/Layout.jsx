@@ -9,6 +9,7 @@ import PostModalCard from '../components/Post/PostModalCard'
 import ModalAddPost from '../components/Modal/ModalAddPost'
 import ModalSettingAccount from '../components/Modal/ModalSettingAccount'
 import ModalAddConsersation from '../components/Modal/ModalAddConsersation'
+import ModalUnsendMessage from '../components/Modal/ModalUnsendMessage'
 
 const Layout = () => {
 
@@ -19,6 +20,7 @@ const Layout = () => {
     const isShowModalImage = useSelector(state => state.modal.showModalImage)
     const isShowModalSetting = useSelector(state => state.modal.showModalSetting)
     const isShowModalAddConversation = useSelector(state => state.modal.showModalAddConversation)
+    const isShowModalUnsendMessage = useSelector(state => state.modal.showModalUnsendMessage)
     // const login = true
     // const isShowModalPost = false
 
@@ -65,6 +67,9 @@ const Layout = () => {
             }
             {
                 isShowModalAddConversation && <ModalAddConsersation />
+            }
+            {
+                isShowModalUnsendMessage && <ModalUnsendMessage />
             }
         </div>
     )

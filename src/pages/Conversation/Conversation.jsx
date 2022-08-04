@@ -10,6 +10,7 @@ import ListUser from './ListUser'
 import Chat from './Chat/Chat'
 import { show } from '../../redux/reducers/modalReducer'
 import { refreshConversation } from '../../redux/reducers/conversationReducer'
+import SkeletonUserChat from '../../components/Skeleton/SkeletonUserChat'
 
 const Conversation = () => {
 
@@ -42,6 +43,7 @@ const Conversation = () => {
     useEffect(() => {
         try {
             const getLastMessage = async () => {
+                setLoading(true)
                 const q = query(collection(db, 'lastMessage'),
                     where('commonId', 'array-contains', userCurrent.id),
                     orderBy('time', 'asc'),
@@ -67,16 +69,23 @@ const Conversation = () => {
     useEffect(() => {
 
         const getUserChatted = async () => {
-            if (lastMessage && lastMessage.length > 0) {
-                let users = []
-                for (let i = 0; i < lastMessage.length; i++) {
-                    const id = lastMessage[i].userAuth === userCurrent.id ? lastMessage[i].user : lastMessage[i].userAuth
-                    const docRef = doc(db, 'users', id)
-                    const docSnap = await getDoc(docRef)
-                    users.push({ ...docSnap.data(), lastMessage: lastMessage[i] })
+            try {
+                if (lastMessage && lastMessage.length > 0) {
+                    let users = []
+                    setLoading(true)
+                    for (let i = 0; i < lastMessage.length; i++) {
+                        const id = lastMessage[i].userAuth === userCurrent.id ? lastMessage[i].user : lastMessage[i].userAuth
+                        const docRef = doc(db, 'users', id)
+                        const docSnap = await getDoc(docRef)
+                        users.push({ ...docSnap.data(), lastMessage: lastMessage[i] })
 
+                    }
+                    setUserChatted(users.reverse())
+                    setLoading(false)
                 }
-                setUserChatted(users)
+            } catch (error) {
+                console.log(error)
+                setLoading(false)
             }
         }
 
@@ -84,7 +93,6 @@ const Conversation = () => {
 
     }, [lastMessage])
 
-    console.log("ss", userChatted)
 
     return (
         <div className='mt-[60px] flex items-center justify-center bg-second-bg'>
@@ -102,13 +110,28 @@ const Conversation = () => {
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                     </div>
-                    <div>
-                        <ListUser
-                            listUser={userChatted}
-                        />
-                        <ListUser
-                            listUser={listUser}
-                        />
+                    <div className='overflow-auto'>
+                        {
+                            loading ?
+                                <>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                    <SkeletonUserChat></SkeletonUserChat>
+                                </>
+                                :
+                                <>
+                                    <ListUser
+                                        listUser={userChatted}
+                                    />
+                                    <ListUser
+                                        listUser={listUser}
+                                    />
+                                </>
+                        }
                     </div>
                 </div>
                 {

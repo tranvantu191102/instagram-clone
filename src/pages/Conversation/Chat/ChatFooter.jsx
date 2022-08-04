@@ -5,7 +5,8 @@ import { faFaceGrinBeam } from '@fortawesome/free-regular-svg-icons'
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { editListUser } from '../../../redux/reducers/conversationReducer';
 import { collection, addDoc, serverTimestamp, doc, setDoc } from "firebase/firestore";
-import { db } from '../../../firebase/config'
+import { db, storage } from '../../../firebase/config'
+import { ref, uploadBytes, getDownloadURL, getMetadata } from "firebase/storage";
 
 import loveImage from '../../../assets/images/chat/heart.png'
 import fileImage from '../../../assets/images/chat/file.png'
@@ -44,20 +45,78 @@ const ChatFooter = ({ user }) => {
                 userAuth: userCurrent.id,
                 user: user.id,
                 message: message,
+                like: false,
                 time: serverTimestamp()
             }
             setMessage("")
             await addDoc(conversationRef, data)
             await setDoc(lastMessage, {
                 ...data,
-                photoURL: user.photoURL,
-                fullname: user.fullname,
-                id: user.id,
                 commonId: [user.id, userCurrent.id]
             })
 
             dispatch(editListUser(user))
         }
+    }
+
+
+    const handleSendImage = async (file) => {
+        const imageRef = ref(storage, `conversation/${new Date().getTime()}-${file.name}`)
+        const lastMessage = doc(db, 'lastMessage', conversationId)
+        const snap = await uploadBytes(imageRef, file)
+        const photoURL = await getDownloadURL(ref(storage, snap.ref.fullPath))
+        const photoPath = snap.ref.fullPath
+
+        const conversationId = user.id > userCurrent.id ? `${user.id + userCurrent.id}` : `${userCurrent.id + user.id}`
+        const conversationRef = collection(db, 'conversations', conversationId, 'content')
+        await addDoc(conversationRef, {
+            userAuth: userCurrent.id,
+            user: user.id,
+            photoURL: photoURL,
+            photoPath: photoPath,
+            like: false,
+            time: serverTimestamp()
+        })
+
+        await setDoc(lastMessage, {
+
+            userAuth: userCurrent.id,
+            user: user.id,
+            message: 'Sent a message',
+            like: false,
+            time: serverTimestamp(),
+            commonId: [user.id, userCurrent.id]
+        })
+
+        dispatch(editListUser(user))
+
+    }
+
+    const handleSendHeart = async () => {
+        const conversationId = user.id > userCurrent.id ? `${user.id + userCurrent.id}` : `${userCurrent.id + user.id}`
+        const conversationRef = collection(db, 'conversations', conversationId, 'content')
+        const lastMessage = doc(db, 'lastMessage', conversationId)
+
+        await addDoc(conversationRef, {
+            userAuth: userCurrent.id,
+            user: user.id,
+            message: 'heart-icon-ttt',
+            like: false,
+            time: serverTimestamp()
+        })
+
+        await setDoc(lastMessage, {
+
+            userAuth: userCurrent.id,
+            user: user.id,
+            message: 'Sent a message',
+            like: false,
+            time: serverTimestamp(),
+            commonId: [user.id, userCurrent.id]
+        })
+
+        dispatch(editListUser(user))
+
     }
 
     return (
@@ -107,12 +166,18 @@ const ChatFooter = ({ user }) => {
                                         className='w-6 h-6 cursor-pointer'
                                     />
                                 </label>
-                                <input type="file" name="" id="file" hidden />
+                                <input
+                                    accept="image/jpeg,image/png,image/heic,image/heif"
+                                    type="file" name="" id="file" hidden
+                                    onChange={(e) => handleSendImage(e.target.files[0])}
+                                />
                             </div>
                             <div className="cursor-pointer">
                                 <img
                                     src={loveImage} alt=""
-                                    className='w-6 h-6' />
+                                    className='w-6 h-6'
+                                    onClick={handleSendHeart}
+                                />
                             </div>
                         </div>
                 }

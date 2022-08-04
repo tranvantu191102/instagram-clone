@@ -82,7 +82,7 @@ const UserSuggessCard = ({ user }) => {
 
 
   return (
-    <div className='flex items-center justify-between my-4'>
+    <div className='flex items-center justify-between my-3'>
       <div className='flex items-center justify-center'>
         <img src={user.photoURL || userImage}
           alt=""
@@ -92,7 +92,7 @@ const UserSuggessCard = ({ user }) => {
           <p className='text-base text-primary-text font-semibold hover:underline cursor-pointer'>
             <Link to={`profile/${user.id}`}> {user.username}</Link>
           </p>
-          <p className='text-base text-gray-text font-semibold'>{user.fullname}</p>
+          <p className='text-sm text-gray-text font-normal'>{user.fullname}</p>
         </div>
       </div>
       <button className='text-sm text-blue-text font-semibold'

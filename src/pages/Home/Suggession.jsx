@@ -3,23 +3,32 @@ import { query, getDocs, limit, collection, where } from "firebase/firestore";
 import { db } from '../../firebase/config';
 
 import UserSuggessCard from '../../components/User/UserSuggessCard'
+import SkeletonSuggestionUser from '../../components/Skeleton/SkeletonSuggestionUser';
 import _ from 'lodash';
 
 const Suggession = ({ user }) => {
 
     const [users, setUsers] = useState([])
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const getUsers = async () => {
-            const userRef = collection(db, 'users')
-            const q = query(userRef, where('id', '!=', user.id), limit(5))
-            const querySnapshot = await getDocs(q)
-            const results = []
-            querySnapshot.forEach((doc) => {
-                results.push(doc.data())
-            })
-            console.log(results)
-            setUsers(results)
+            try {
+                setLoading(true)
+                const userRef = collection(db, 'users')
+                const q = query(userRef, where('id', '!=', user.id), limit(5))
+                const querySnapshot = await getDocs(q)
+                const results = []
+                querySnapshot.forEach((doc) => {
+                    results.push(doc.data())
+                })
+                console.log(results)
+                setUsers(results)
+                setLoading(false)
+            } catch (error) {
+                console.log(error)
+                setLoading(false)
+            }
         }
 
         getUsers()
@@ -36,10 +45,19 @@ const Suggession = ({ user }) => {
             </div>
             <div>
                 {
-                    users && users.length > 0 &&
-                    users.map((item, index) => (
-                        <UserSuggessCard key={index} user={item} />
-                    ))
+                    loading ?
+                        <>
+                            <SkeletonSuggestionUser></SkeletonSuggestionUser>
+                            <SkeletonSuggestionUser></SkeletonSuggestionUser>
+                            <SkeletonSuggestionUser></SkeletonSuggestionUser>
+                            <SkeletonSuggestionUser></SkeletonSuggestionUser>
+                            <SkeletonSuggestionUser></SkeletonSuggestionUser>
+                        </>
+                        :
+                        users && users.length > 0 &&
+                        users.map((item, index) => (
+                            <UserSuggessCard key={index} user={item} />
+                        ))
                 }
             </div>
         </>

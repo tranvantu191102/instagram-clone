@@ -131,6 +131,7 @@ const ModalAddPost = () => {
                                         Select from computer
                                     </label>
                                     <input
+                                        accept="image/jpeg,image/png,image/heic,image/heif"
                                         type="file"
                                         hidden id='input'
                                         onChange={(e) => handleOnChangeInput(e)}

@@ -33,7 +33,8 @@ const UserCard = ({ user }) => {
                     user.lastMessage.message ?
                         <p className='text-base text-gray-text font-normal'>
                             {user.lastMessage.userAuth === userCurrent.id ?
-                                `Bạn: ${user.lastMessage.message}` : user.lastMessage.message}
+                                `You: ${user.lastMessage.message}` : user.lastMessage.message
+                            }
                         </p>
                         :
                         null
