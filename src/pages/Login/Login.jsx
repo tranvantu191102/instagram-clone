@@ -11,6 +11,8 @@ import {
     getAdditionalUserInfo
 } from 'firebase/auth'
 import { auth, db } from '../../firebase/config'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 
 import logoLogin from '../../assets/images/logo-login.png'
@@ -140,11 +142,20 @@ const Login = () => {
                     }
                 </div>
                 <div className='w-full mt-1 px-8'>
-                    <Button
-                        name={`${loading ? "loading..." : "Log In"}`}
-                        disable={disableBtn}
-                        onClick={hanldeLoginUser}
-                    />
+                    {
+                        loading ?
+                            <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
+                                <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
+                                    <FontAwesomeIcon icon={faSpinner} />
+                                </svg>
+                            </div> :
+                            <Button
+                                name="Log In"
+                                disable={disableBtn}
+                                onClick={hanldeLoginUser}
+                            />
+                    }
+
                 </div>
                 <div className='flex items-center justify-center w-full px-8'>
                     <div className='h-[1px] flex-1 bg-gray-text'></div>

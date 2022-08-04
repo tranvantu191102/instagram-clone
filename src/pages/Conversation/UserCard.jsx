@@ -30,7 +30,7 @@ const UserCard = ({ user }) => {
             <div>
                 <h4 className='text-base text-primary-text font-semibold'>{user.fullname}</h4>
                 {
-                    user.lastMessage.message ?
+                    user.lastMessage && user.lastMessage.message ?
                         <p className='text-base text-gray-text font-normal'>
                             {user.lastMessage.userAuth === userCurrent.id ?
                                 `You: ${user.lastMessage.message}` : user.lastMessage.message

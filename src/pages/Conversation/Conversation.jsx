@@ -82,6 +82,8 @@ const Conversation = () => {
                     }
                     setUserChatted(users.reverse())
                     setLoading(false)
+                } else {
+                    setLoading(false)
                 }
             } catch (error) {
                 console.log(error)

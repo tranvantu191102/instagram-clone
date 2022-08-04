@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 
 import HeartImage from '../../../assets/images/chat/heart-red.png'
+import userImage from '../../../assets/images/user.png'
 
 const Message = ({ user, message }) => {
 
@@ -69,7 +70,7 @@ const Message = ({ user, message }) => {
                 <div className="">
                     {
                         message.user !== user.id && <img
-                            src={user.photoURL}
+                            src={user.photoURL || userImage}
                             alt=""
                             className='w-7 h-7 rounded-full mr-4'
                         />

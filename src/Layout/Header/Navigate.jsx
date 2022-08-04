@@ -45,11 +45,11 @@ const Navigate = () => {
 
     const handleLogOut = async () => {
         try {
-            await signOut(auth)
             dispatch(logout())
             dispatch(hide())
             dispatch(refreshConversation())
             dispatch(refreshPost())
+            await signOut(auth)
             navigate("/login")
         } catch (error) {
             console.log(error);

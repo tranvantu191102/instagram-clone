@@ -7,6 +7,8 @@ import { login } from '../../redux/reducers/userReducer'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
 import { auth, db } from '../../firebase/config'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import logoLogin from '../../assets/images/logo-login.png'
 import appStoreImg from "../../assets/images/app-store.png"
@@ -136,11 +138,20 @@ const Register = () => {
                     </p>
                 </div>
                 <div className='w-full mt-1 px-8'>
-                    <Button
-                        name={`${loading ? "Loading..." : "Sign Up"}`}
-                        disable={disableBtn}
-                        onClick={handleRegisterUser}
-                    />
+                    {
+                        loading ?
+                            <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
+                                <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
+                                    <FontAwesomeIcon icon={faSpinner} />
+                                </svg>
+                            </div> :
+                            <Button
+                                name="Sign Up"
+                                disable={disableBtn}
+                                onClick={handleRegisterUser}
+                            />
+                    }
+
                 </div>
             </div>
             <div className='w-[350px] mt-4 bg-primary-bg border-[1px] border-gray-text p-3 flex items-center flex-col justify-center'>
