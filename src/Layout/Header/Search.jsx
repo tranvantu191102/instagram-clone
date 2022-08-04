@@ -94,9 +94,10 @@ const Search = () => {
             </div>
             <input
                 ref={inputRef}
-                className='text-lg font-normal bg-transparent outline-none'
+                className='text-lg font-normal bg-transparent outline-none placeholder:text-base'
                 type="text"
                 placeholder='Search...'
+                value={searchTerm}
                 onFocus={handleOnFocusInput}
                 onBlur={handleOnBlurInput}
                 onChange={(e) => handleOnChangeInput(e)}
