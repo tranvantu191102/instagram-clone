@@ -98,7 +98,7 @@ const Conversation = () => {
 
     return (
         <div className='mt-[60px] flex items-center justify-center bg-second-bg'>
-            <div className='w-[935px] h-[calc(100vh-100px)] flex justify-center items-start bg-primary-bg mt-5 border-[1px] border-border-color rounded'>
+            <div className='w-[935px] tab:w-[800px] h-[calc(100vh-100px)] flex justify-center items-start bg-primary-bg mt-5 border-[1px] border-border-color rounded'>
                 <div className='w-[350px]'>
                     <div className='flex items-center justify-between px-4 py-2 border-b-[1px] border-border-color'>
                         <div></div>

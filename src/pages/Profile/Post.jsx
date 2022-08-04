@@ -59,7 +59,7 @@ const Post = ({ user, id }) => {
                         posts.map((item, index) => (
                             <div
                                 key={index}
-                                className='bg-center bg-cover bg-no-repeat w-[290px] h-[290px] mb-7 relative'
+                                className='bg-center bg-cover bg-no-repeat w-[290px] h-[290px] tab:w-[200px] tab:h-[200px] mb-7 relative'
                                 style={{ backgroundImage: `url(${item.arrImg[0].photoURL})` }}
 
                             >

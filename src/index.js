@@ -7,6 +7,7 @@ import { persistStore } from 'redux-persist';
 
 import store from './redux/store';
 import Layout from './Layout/Layout';
+import ScreenMobile from './components/Mobile/ScreenMobile';
 
 
 import "swiper/css";
@@ -22,7 +23,10 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-          <Layout />
+          <ScreenMobile />
+          <div className='mob:hidden'>
+            <Layout />
+          </div>
         </BrowserRouter>
       </PersistGate>
     </Provider>

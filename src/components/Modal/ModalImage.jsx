@@ -74,6 +74,7 @@ const ModalImage = () => {
                     <label htmlFor="image" className='text-center w-full  cursor-pointer block'>Upload Photo</label>
                     <input
                         type="file"
+                        accept="image/jpeg,image/png,image/heic,image/heif"
                         id="image"
                         hidden={true}
                         onChange={(e) => handleOnchangeImage(e.target.files[0])}

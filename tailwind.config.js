@@ -37,6 +37,10 @@ module.exports = {
       },
       height: {
         header: "var(--height-header)",
+      },
+      screens: {
+        tab: { 'max': '970px' },
+        mob: { 'max': '800px' }
       }
     },
   },

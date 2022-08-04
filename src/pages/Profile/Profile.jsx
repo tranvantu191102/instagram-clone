@@ -42,7 +42,7 @@ const Profile = () => {
                         <img
                             src={user && user.photoURL ? user.photoURL : userImage}
                             alt=""
-                            className='w-[150px] h-[150px] rounded-full'
+                            className='w-[150px] h-[150px] rounded-full tab:w-[120px] tab:h-[120px]'
                         />
                     </div>
                     <div className='ml-4'>
