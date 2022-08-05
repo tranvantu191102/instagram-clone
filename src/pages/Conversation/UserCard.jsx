@@ -14,7 +14,6 @@ const UserCard = ({ user }) => {
         dispatch(addUserActive(user))
     }
 
-    // console.log(user)
 
     return (
         <div className='py-3 px-4 hover:bg-second-bg cursor-pointer flex items-center justify-start'

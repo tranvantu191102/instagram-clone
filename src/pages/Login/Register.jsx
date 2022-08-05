@@ -86,7 +86,6 @@ const Register = () => {
 
     }
 
-    console.log(emailError)
 
     return (
         <div className='w-full bg-second-bg flex flex-col items-center justify-center min-h-screen'>

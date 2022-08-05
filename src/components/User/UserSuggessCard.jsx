@@ -29,7 +29,6 @@ const UserSuggessCard = ({ user }) => {
 
     try {
       setLoading(true)
-      console.log("Follow")
       const userRef = doc(db, 'users', user.id)
       const userCurrentRef = doc(db, 'users', userCurrent.id)
 
@@ -55,7 +54,6 @@ const UserSuggessCard = ({ user }) => {
   const handleUnFollowUser = async () => {
     try {
       setLoading(true)
-      console.log("UnFollow")
       const userFollowed = doc(db, 'users', user.id)
       const userFollow = doc(db, 'users', userCurrent.id)
 

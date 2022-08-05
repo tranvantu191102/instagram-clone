@@ -22,7 +22,6 @@ const Suggession = ({ user }) => {
                 querySnapshot.forEach((doc) => {
                     results.push(doc.data())
                 })
-                console.log(results)
                 setUsers(results)
                 setLoading(false)
             } catch (error) {
