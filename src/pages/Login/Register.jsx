@@ -42,8 +42,13 @@ const Register = () => {
         }
     }, [username, password, fullname, email])
 
-    const handleRegisterUser = async () => {
+
+
+    const handleRegisterUser = async (e) => {
+        e.preventDefault()
         try {
+            if (!emailError || disableBtn) return
+
             setLoading(true)
             const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -81,78 +86,86 @@ const Register = () => {
 
     }
 
+    console.log(emailError)
+
     return (
         <div className='w-full bg-second-bg flex flex-col items-center justify-center min-h-screen'>
             <div className='w-[350px] mt-8 bg-primary-bg border-[1px] border-gray-text p-3 flex items-center flex-col justify-center'>
-                <img
-                    src={logoLogin}
-                    alt="logo-login"
-                    className='mt-9 mb-3'
-                />
-                <span className='text-lg mx-8 font-semibold text-gray-text text-center'>
-                    Sign up to see photos and videos from your friends.
-                </span>
-                <div className='flex items-center justify-center w-full px-8'>
-                    <div className='h-[1px] flex-1 bg-gray-text'></div>
-                    <span className='text-base text-gray-text p-5 '>OR</span>
-                    <div className='h-[1px] flex-1 bg-gray-text'></div>
-                </div>
-                <div className='mt-1 mx-8'>
-                    <Input
-                        type="text"
-                        value={email}
-                        error={emailError}
-                        text="Email"
-                        onChange={(e) => setEmail(e)}
-                        onBlur={(e) => handleValidUserName(e)}
+                <form
+                    className=' flex items-center flex-col justify-center'
+                    onSubmit={handleRegisterUser}
+                >
+                    <img
+                        src={logoLogin}
+                        alt="logo-login"
+                        className='mt-9 mb-3'
                     />
-                    <Input
-                        type="text"
-                        value={fullname}
-                        text="Full Name"
-                        onChange={(e) => setFullname(e)}
-                        error={true}
-                    />
-                    <Input
-                        type="text"
-                        value={username}
-                        text="User Name"
-                        onChange={(e) => setUsername(e)}
-                        error={true}
-                    />
-                    <Input
-                        type="password"
-                        text="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e)}
-                        error={true}
-                    />
-                </div>
+                    <span className='text-lg mx-8 font-semibold text-gray-text text-center'>
+                        Sign up to see photos and videos from your friends.
+                    </span>
+                    <div className='flex items-center justify-center w-full px-8'>
+                        <div className='h-[1px] flex-1 bg-gray-text'></div>
+                        <span className='text-base text-gray-text p-5 '>OR</span>
+                        <div className='h-[1px] flex-1 bg-gray-text'></div>
+                    </div>
+                    <div className='mt-1 mx-8'>
+                        <Input
+                            type="text"
+                            value={email}
+                            error={emailError}
+                            text="Email"
+                            onChange={(e) => setEmail(e)}
+                            onBlur={(e) => handleValidUserName(e)}
+                        />
+                        <Input
+                            type="text"
+                            value={fullname}
+                            text="Full Name"
+                            onChange={(e) => setFullname(e)}
+                            error={true}
+                        />
+                        <Input
+                            type="text"
+                            value={username}
+                            text="User Name"
+                            onChange={(e) => setUsername(e)}
+                            error={true}
+                        />
+                        <Input
+                            type="password"
+                            text="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e)}
+                            error={true}
+                        />
+                    </div>
 
-                <div>
-                    <p className='mx-8 text-sm text-gray-text font-normal text-center mt-2'>
-                        People who use our service may have uploaded your contact information to Instagram.<a href="https://www.facebook.com/help/instagram/261704639352628"
-                            className='mx-8 text-sm text-gray-text font-semibold text-center inline-block'
-                        >Learn more
-                        </a>
-                    </p>
-                </div>
-                <div className='w-full mt-1 px-8'>
-                    {
-                        loading ?
-                            <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
-                                <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
-                                    <FontAwesomeIcon icon={faSpinner} />
-                                </svg>
-                            </div> :
-                            <Button
-                                name="Sign Up"
-                                disable={disableBtn}
-                                onClick={handleRegisterUser}
-                            />
-                    }
+                    <div>
+                        <p className='mx-8 text-sm text-gray-text font-normal text-center mt-2'>
+                            People who use our service may have uploaded your contact information to Instagram.<a href="https://www.facebook.com/help/instagram/261704639352628"
+                                className='mx-8 text-sm text-gray-text font-semibold text-center inline-block'
+                            >Learn more
+                            </a>
+                        </p>
+                    </div>
+                    <div className='w-full mt-1 px-8'>
+                        {
+                            loading ?
+                                <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
+                                    <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
+                                        <FontAwesomeIcon icon={faSpinner} />
+                                    </svg>
+                                </div> :
+                                <Button
+                                    name="Sign Up"
+                                    disable={disableBtn}
+                                    onClick={handleRegisterUser}
+                                    type="submit"
+                                />
+                        }
 
-                </div>
+                    </div>
+                </form>
             </div>
             <div className='w-[350px] mt-4 bg-primary-bg border-[1px] border-gray-text p-3 flex items-center flex-col justify-center'>
                 <p className='text-base text-primary-text py-1'>

@@ -40,7 +40,7 @@ module.exports = {
       },
       screens: {
         tab: { 'max': '970px' },
-        mob: { 'max': '800px' }
+        mob: { 'max': '800px' },
       }
     },
   },

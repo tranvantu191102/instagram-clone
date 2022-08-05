@@ -9,6 +9,7 @@ const Button = (props) => {
         <button
             className={`w-full flex items-center justify-center py-1 bg-blue-text rounded-md ${disable ? "opacity-50 cursor-default pointer-events-none" : ""}`}
             onClick={props.onClick ? props.onClick : null}
+            type={props?.type}
         >
             {
                 props.iconLeft ? <FontAwesomeIcon icon={props.iconLeft} /> : null

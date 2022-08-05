@@ -4,10 +4,11 @@ import { db } from '../../firebase/config';
 import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faUser, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserRedux } from '../../redux/reducers/userReducer'
 import { show } from '../../redux/reducers/modalReducer';
+import { addUserActive } from '../../redux/reducers/conversationReducer'
 
 import Footer from '../../Layout/Footer'
 import userImage from '../../assets/images/user.png'
@@ -25,23 +26,28 @@ const ProfileUser = () => {
     const [followed, setFollowed] = useState(false)
     const [loading, setLoading] = useState(false)
     const [activeIndex, setActiveIndex] = useState(0)
+    const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         const getInfoUser = async () => {
-            const userRef = doc(db, 'users', id)
-            const docSnap = await getDoc(userRef)
-            if (docSnap) {
-                setUser(docSnap.data())
-            }
-
-            docSnap.data().followers.forEach((id) => {
-                if (id === userCurrent.id) {
-                    setFollowed(true)
-                    return
+            try {
+                const userRef = doc(db, 'users', id)
+                const docSnap = await getDoc(userRef)
+                if (docSnap) {
+                    setUser(docSnap.data())
                 }
-            })
+
+                docSnap.data().followers.forEach((id) => {
+                    if (id === userCurrent.id) {
+                        setFollowed(true)
+                        return
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         getInfoUser()
@@ -104,6 +110,11 @@ const ProfileUser = () => {
         dispatch(show('MODAL_SETTING'))
     }
 
+    const handleGotoChat = () => {
+        dispatch(addUserActive(user))
+        navigate('/conversation')
+    }
+
 
 
     return (
@@ -126,8 +137,10 @@ const ProfileUser = () => {
                             {
                                 followed ?
                                     <>
-                                        <button className='px-3 py-[5px] border-[1px] mr-4 border-border-color rounded-lg font-semibold text-base'>
-                                            <Link to={`/conversation/${user.id}`}>Message</Link>
+                                        <button className='px-3 py-[5px] border-[1px] mr-4 border-border-color rounded-lg font-semibold text-base'
+                                            onClick={handleGotoChat}
+                                        >
+                                            Message
                                         </button>
                                         <button
                                             className={`px-5 py-[5px] border-[1px] mr-4 border-border-color rounded-lg font-semibold text-base 

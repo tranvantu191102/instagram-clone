@@ -121,66 +121,74 @@ const ChatFooter = ({ user }) => {
 
     return (
         <div className='h-[84px] w-full p-5'>
-            <div className='h-full flex items-center justify-between border-[1px] px-5 border-border-color rounded-2xl'>
-                <div ref={emojiRef}
-                    className="relative pr-5"
+            <div className=''>
+                <form
+                    className=' h-full flex items-center justify-between border-[1px] px-5 py-2 border-border-color rounded-2xl'
+                    onSubmit={handleSendMessage}
                 >
-                    <FontAwesomeIcon
-                        icon={faFaceGrinBeam}
-                        className='text-xl cursor-pointer text-gray-text'
-                        onClick={() => setShowEmoji(!showEmoji)}
-                    />
-                    {
-                        showEmoji &&
-                        <div className="absolute bottom-[calc(100%+10px)] -left-5">
-                            <Picker onEmojiClick={onEmojiClick} />
-                        </div>
-                    }
-                </div>
-                <input
-                    type="text"
-                    placeholder='Message...'
-                    className='placeholder:text-base placeholder:text-primary-color focus:text-gray-color
+                    <div ref={emojiRef}
+                        className="relative pr-5"
+                    >
+                        <FontAwesomeIcon
+                            icon={faFaceGrinBeam}
+                            className='text-xl cursor-pointer text-gray-text'
+                            onClick={() => setShowEmoji(!showEmoji)}
+                        />
+                        {
+                            showEmoji &&
+                            <div className="absolute bottom-[calc(100%+10px)] -left-5">
+                                <Picker onEmojiClick={onEmojiClick} />
+                            </div>
+                        }
+                    </div>
+                    <input
+                        type="text"
+                        placeholder='Message...'
+                        className='placeholder:text-base placeholder:text-primary-color focus:text-gray-color
                     flex-1 px-2 py-1 outline-none border-none text-base
                     '
-                    value={message}
-                    onChange={(e) => handleOnchangeMessage(e)}
-                    onFocus={handleOnFocusInput}
-                />
-                {
-                    message ?
-                        <div className="">
-                            <span className='text-base text-blue-text font-semibold cursor-pointer pl-5'
-                                onClick={handleSendMessage}
-                            >
-                                Send
-                            </span>
-                        </div>
-                        :
-                        <div className="flex items-center justify-center">
-                            <div className="mr-4 ">
-                                <label htmlFor="file">
-                                    <img
-                                        src={fileImage}
-                                        alt=""
-                                        className='w-6 h-6 cursor-pointer'
+                        value={message}
+                        onChange={(e) => handleOnchangeMessage(e)}
+                        onFocus={handleOnFocusInput}
+                    />
+                    {
+                        message ?
+                            <div className="">
+                                <button
+                                    type='submit'
+                                    className='text-base text-blue-text font-semibold cursor-pointer pl-5'
+                                    onClick={handleSendMessage}
+
+                                >
+                                    Send
+                                </button>
+                            </div>
+                            :
+                            <div className="flex items-center justify-center">
+                                <div className="mr-4 ">
+                                    <label htmlFor="file">
+                                        <img
+                                            src={fileImage}
+                                            alt=""
+                                            className='w-6 h-6 cursor-pointer'
+                                        />
+                                    </label>
+                                    <input
+                                        accept="image/jpeg,image/png,image/heic,image/heif"
+                                        type="file" name="" id="file" hidden
+                                        onChange={(e) => handleSendImage(e.target.files[0])}
                                     />
-                                </label>
-                                <input
-                                    accept="image/jpeg,image/png,image/heic,image/heif"
-                                    type="file" name="" id="file" hidden
-                                    onChange={(e) => handleSendImage(e.target.files[0])}
-                                />
+                                </div>
+                                <div className="cursor-pointer">
+                                    <img
+                                        src={loveImage} alt=""
+                                        className='w-6 h-6'
+                                        onClick={handleSendHeart}
+                                    />
+                                </div>
                             </div>
-                            <div className="cursor-pointer">
-                                <img
-                                    src={loveImage} alt=""
-                                    className='w-6 h-6'
-                                    onClick={handleSendHeart}
-                                />
-                            </div>
-                        </div>
-                }
+                    }
+                </form>
             </div>
         </div>
     )

@@ -64,7 +64,7 @@ const Conversation = () => {
         }
 
 
-    }, [listUser])
+    }, [])
 
     useEffect(() => {
 
@@ -127,10 +127,10 @@ const Conversation = () => {
                                 :
                                 <>
                                     <ListUser
-                                        listUser={userChatted}
+                                        listUser={listUser}
                                     />
                                     <ListUser
-                                        listUser={listUser}
+                                        listUser={userChatted}
                                     />
                                 </>
                         }

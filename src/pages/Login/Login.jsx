@@ -79,7 +79,8 @@ const Login = () => {
         }
     }
 
-    const hanldeLoginUser = async () => {
+    const hanldeLoginUser = async (e) => {
+        e.preventDefault()
         try {
             setLoading(true)
             const { user } = await signInWithEmailAndPassword(auth, username, password)
@@ -116,58 +117,63 @@ const Login = () => {
     return (
         <div className='w-full bg-second-bg flex flex-col items-center justify-center min-h-screen'>
             <div className='w-[350px] mt-8 bg-primary-bg border-[1px] border-gray-text p-3 flex items-center flex-col justify-center'>
-                <img
-                    src={logoLogin}
-                    alt="logo-login"
-                    className='mt-9 mb-3'
-                />
-                <div className='mt-10 mx-8'>
-                    <Input
-                        type="text"
-                        value={username}
-                        error={emailError}
-                        text="Phone number, username or email"
-                        onChange={(e) => setUsername(e)}
-                        onBlur={(e) => handleValidUserName(e)}
+                <form className='flex items-center flex-col justify-center'
+                    onSubmit={hanldeLoginUser}
+                >
+                    <img
+                        src={logoLogin}
+                        alt="logo-login"
+                        className='mt-9 mb-3'
                     />
-                    <Input
-                        type="password"
-                        text="Password"
-                        error={true}
-                        value={password}
-                        onChange={(e) => setPassword(e)}
-                    />
-                    {
-                        errorLogin && <p className='text-base text-red-500 mb-1 font-normal'>Email or password is wrong!</p>
-                    }
-                </div>
-                <div className='w-full mt-1 px-8'>
-                    {
-                        loading ?
-                            <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
-                                <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
-                                    <FontAwesomeIcon icon={faSpinner} />
-                                </svg>
-                            </div> :
-                            <Button
-                                name="Log In"
-                                disable={disableBtn}
-                                onClick={hanldeLoginUser}
-                            />
-                    }
+                    <div className='mt-10 mx-8'>
+                        <Input
+                            type="text"
+                            value={username}
+                            error={emailError}
+                            text="Phone number, username or email"
+                            onChange={(e) => setUsername(e)}
+                            onBlur={(e) => handleValidUserName(e)}
+                        />
+                        <Input
+                            type="password"
+                            text="Password"
+                            error={true}
+                            value={password}
+                            onChange={(e) => setPassword(e)}
+                        />
+                        {
+                            errorLogin && <p className='text-base text-red-500 mb-1 font-normal'>Email or password is wrong!</p>
+                        }
+                    </div>
+                    <div className='w-full mt-1 px-8'>
+                        {
+                            loading ?
+                                <div className="w-full flex items-center justify-center py-1 bg-blue-text rounded-md">
+                                    <svg className="animate-spin h-5 w-5 mr-3 ... text-white-text" viewBox="0 0 24 24">
+                                        <FontAwesomeIcon icon={faSpinner} />
+                                    </svg>
+                                </div> :
+                                <Button
+                                    name="Log In"
+                                    disable={disableBtn}
+                                    onClick={hanldeLoginUser}
+                                    type="submit"
+                                />
+                        }
 
-                </div>
-                <div className='flex items-center justify-center w-full px-8'>
-                    <div className='h-[1px] flex-1 bg-gray-text'></div>
-                    <span className='text-base text-gray-text p-5 '>OR</span>
-                    <div className='h-[1px] flex-1 bg-gray-text'></div>
-                </div>
-                <div className='w-full px-8'>
-                    <Button
-                        name="Log in with Facebook"
-                        onClick={handleLoginWithFacebook}
-                    />
-                </div>
+                    </div>
+                    <div className='flex items-center justify-center w-full px-8'>
+                        <div className='h-[1px] flex-1 bg-gray-text'></div>
+                        <span className='text-base text-gray-text p-5 '>OR</span>
+                        <div className='h-[1px] flex-1 bg-gray-text'></div>
+                    </div>
+                    <div className='w-full px-8'>
+                        <Button
+                            name="Log in with Facebook"
+                            onClick={handleLoginWithFacebook}
+                        />
+                    </div>
+                </form>
                 <div className='mt-10'>
                     <span className='text-sm text-primary-text hover:underline cursor-pointer'>Forgot password?</span>
                 </div>
