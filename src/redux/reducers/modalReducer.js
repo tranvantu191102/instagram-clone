@@ -26,9 +26,9 @@ const modalSlice = createSlice({
                 case 'MODAL_POST':
                     state.showModalPost = true;
                     break;
-                case 'MODAL_POST_OPTIONS':
-                    state.showModalPostOptions = true;
-                    break;
+                // case 'MODAL_POST_OPTIONS':
+                //     state.showModalPostOptions = true;
+                //     break;
                 case 'MODAL_SETTING':
                     state.showModalSetting = true;
                     break;
@@ -61,9 +61,9 @@ const modalSlice = createSlice({
                 case 'MODAL_POST':
                     state.showModalPost = false;
                     break;
-                case 'MODAL_POST_OPTIONS':
-                    state.showModalPostOptions = false;
-                    break;
+                // case 'MODAL_POST_OPTIONS':
+                //     state.showModalPostOptions = false;
+                //     break;
                 case 'MODAL_SETTING':
                     state.showModalSetting = false;
                     break;

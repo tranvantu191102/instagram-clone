@@ -3,7 +3,7 @@ import { updateDoc, doc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 import { db } from '../../firebase/config'
 import { useDispatch, useSelector } from 'react-redux'
-import { hide } from '../../redux/reducers/modalReducer'
+import { hide, show } from '../../redux/reducers/modalReducer'
 import { setUserRedux } from '../../redux/reducers/userReducer'
 
 
@@ -67,7 +67,9 @@ const OptionPostCardUser = ({ post, user, setShowOptionPostCard }) => {
     }
 
     const handleGotoPost = () => {
-        navigate(`/post/${post.id}`)
+        // navigate(`/post/${post.id}`)
+        setShowOptionPostCard(false)
+        dispatch(show('MODAL_POST'))
     }
 
     const handleCancelOption = () => {

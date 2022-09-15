@@ -1,13 +1,21 @@
 import React from 'react'
 import UserCard from './UserCard'
 
-import { useSelector } from 'react-redux'
 
 
-const ListUser = ({ listUser }) => {
+const ListUser = ({ listUser, listUserRedux }) => {
 
     return (
-        <div className=''>
+        <div className='overflow-auto h-[calc(100vh-158px)]'>
+            {
+                listUserRedux && listUserRedux.length > 0 &&
+                listUserRedux.map((item, index) => (
+                    <UserCard
+                        key={index}
+                        user={item}
+                    />
+                ))
+            }
             {
                 listUser && listUser.length > 0 &&
                 listUser.map((item, index) => (

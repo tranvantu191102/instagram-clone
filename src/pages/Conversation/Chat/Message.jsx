@@ -131,7 +131,7 @@ const Message = ({ user, message }) => {
                     </div>
                     {
                         user.id !== message.user &&
-                        <div className={`absolute bottom-full left-0 ${showOptionMessage ? ' visible opacity-100 pointer-events-auto scale-100 transition-all duration-100 ease-linear'
+                        <div className={`absolute bottom-full left-0 z-[99999] ${showOptionMessage ? ' visible opacity-100 pointer-events-auto scale-100 transition-all duration-100 ease-linear'
                             : 'invisible opacity-0 scale-0 pointer-events-none'} `}
 
                         >
@@ -154,7 +154,7 @@ const Message = ({ user, message }) => {
                     }
                     {
                         user.id === message.user &&
-                        <div className={`absolute bottom-full right-0 ${showOptionMessage ? ' visible opacity-100 pointer-events-auto scale-100 transition-all duration-100 ease-linear'
+                        <div className={`absolute bottom-full right-0 z-[999999]  ${showOptionMessage ? ' visible opacity-100 pointer-events-auto scale-100 transition-all duration-100 ease-linear'
                             : 'invisible opacity-0 scale-0 pointer-events-none'} `}
 
 

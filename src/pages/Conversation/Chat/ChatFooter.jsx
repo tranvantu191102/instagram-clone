@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { editListUser } from '../../../redux/reducers/conversationReducer';
 import { collection, addDoc, serverTimestamp, doc, setDoc } from "firebase/firestore";
 import { db, storage } from '../../../firebase/config'
-import { ref, uploadBytes, getDownloadURL, getMetadata } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import loveImage from '../../../assets/images/chat/heart.png'
 import fileImage from '../../../assets/images/chat/file.png'
@@ -14,10 +14,10 @@ import fileImage from '../../../assets/images/chat/file.png'
 const ChatFooter = ({ user }) => {
     const [showEmoji, setShowEmoji] = useState(false)
     const [message, setMessage] = useState("")
-    const [loading, setLoading] = useState(false)
     const emojiRef = useRef()
     const dispatch = useDispatch()
     const userCurrent = useSelector(state => state.user.userData)
+    const listUser = useSelector(state => state.conversation.listUser)
 
     const onEmojiClick = (event, emojiObject) => {
         setMessage(message + emojiObject.emoji)
@@ -49,15 +49,21 @@ const ChatFooter = ({ user }) => {
                 time: serverTimestamp()
             }
             setMessage("")
+
             await addDoc(conversationRef, data)
             await setDoc(lastMessage, {
                 ...data,
                 commonId: [user.id, userCurrent.id]
             })
-
-            dispatch(editListUser(user))
+            listUser.forEach(el => {
+                if (el.id === user.id) {
+                    dispatch(editListUser(user))
+                }
+            })
         }
     }
+
+
 
 
     const handleSendImage = async (file) => {
